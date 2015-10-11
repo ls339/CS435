@@ -1,3 +1,7 @@
+/*
+ * ls339@njit.edu
+ * CS435
+ */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -17,10 +21,27 @@ struct node* addNode(int row, int column, int value) {
   head->column_link=NULL;
   return head;
 }
+
+void printMatrix(struct node *row[], struct node *column[],int n) {
+  for(int i=0;i<n;i++){
+    struct node *current = row[i];
+    for(int j=0;j<n;j++) {
+      if(current->row == i && current->column == j) {
+	printf(" %d ",current->value);
+	current = current->row_link;
+      }else{
+	printf(" 0 ");
+      }
+    }
+    printf("\n");
+  }
+}
+
 int main(int argc, char **argv) {
 
   int n = 4;
-  
+
+  /* Testing */
   struct node *row[n];
   struct node *column[n];
   /*
@@ -60,40 +81,31 @@ int main(int argc, char **argv) {
   column[1] = node3;
   column[2] = node2;
   column[3] = node6;
-  //printf("The value of the head node is %d\n", row[0]->value);
+  /*
+  printf("Testing Matrix\n");
+  printMatrix(row,column,n);
+  */
 
-  //struct node *current = row[0];  
-  for(int i=0;i<n;i++) {
-    struct node *current = row[i];
-    /*
-    if(current->row == i) {
-      printf(" %d ",current->value);
-      current = current->row_link;
-    } else {
-      printf(" 0 ");
-    }
-    */
-    //current = current->row_link;
-    /*
-    while(current->row_link != row[i]) {
-      printf(" %d ",current->value);
-      current = current->row_link;
-    }
-    */
-    
-    for(int j=0;j<n;j++) {
-      if(current->row == i && current->column == j) {
-	printf(" %d ",current->value);
-	current = current->row_link;
-      }else{
-	printf(" 0 ");
+  // Initialize by Formula
+  struct node *b_row[n];
+  struct node *b_column[n];
+  for(int i=0;i<n;i++){
+    //struct node *rcurrent = b_row[i];
+    for(int j=0;j<n;j++){
+      //struct node *ccurrent = b_column[j];
+      if(i==j){
+	struct node *nodei = addNode(i,j,i+1);
+	b_row[i] = nodei;
+	b_column[i] = nodei;
+	b_row[i]->row_link = nodei;
+	b_column[i]->column_link = nodei;
       }
-	
-      //printf("A=[%d][%d]\n",i,j);
     }
-    
-    printf("\n");
-    
   }
-
+  printf("Initialized by formula:\n");
+  printf("\tbij = { i if i==j\n\t\t0 otherwise }\n");
+  //printf("************\n");
+  printf("* Matrix B *\n");
+  //printf("************\n");
+  printMatrix(b_row,b_column,n);
 }
