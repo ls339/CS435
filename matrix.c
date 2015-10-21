@@ -4,6 +4,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 struct node {
   int row, column, value;
@@ -110,6 +111,11 @@ void intializeByInput(int n) {
   printMatrix(mrow,mcolumn,n);
 }
 
+bool isEven(int i) {
+  if((i % 2) == 0 ) return true;
+  return false;
+}
+
 int main(int argc, char **argv) {
 
   if(argc < 2) {
@@ -117,63 +123,20 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
+  struct node *tmp;
   int n = atoi(argv[1]);
 
-  intializeByInput(n);
-
-  /* Testing */
-  struct node *row[n];
-  struct node *column[n];
-  /*
-   * Matrix
-   *   0 1 2 3 
-   * 0 8 0 6 0
-   * 1 0 7 5 0
-   * 2 3 0 0 0
-   * 3 0 0 0 9
-   */
-  struct node *node1 = addNode(0,0,8);
-  struct node *node2 = addNode(0,2,6);
-  struct node *node3 = addNode(1,1,7);
-  struct node *node4 = addNode(1,2,5);
-  struct node *node5 = addNode(2,0,3);
-  struct node *node6 = addNode(3,3,9);
-
-  /* Link them up */
-  node1->row_link = node2;
-  node1->column_link = node5;
-  node2->row_link = node1;
-  node2->column_link = node4;
-  node3->row_link = node4;
-  node3->column_link = node3;
-  node4->row_link = node3;
-  node4->column_link = node2;
-  node5->row_link = node5;
-  node5->column_link = node1;
-  node6->row_link = node6;
-  node6->column_link = node6;
-
-  row[0] = node1;
-  row[1] = node3;
-  row[2] = node5;
-  row[3] = node6;
-  column[0] = node1;
-  column[1] = node3;
-  column[2] = node2;
-  column[3] = node6;
-  /*
-  printf("Testing Matrix\n");
-  printMatrix(row,column,n);
-  */
+  //intializeByInput(n);
 
   int i,j;
-  // Initialize by Formula
+
+  /*
+   * Initialize by formula : Matrix B
+   */
   struct node *b_row[n];
   struct node *b_column[n];
   for(i=0;i<n;i++){
-    //struct node *rcurrent = b_row[i];
     for(j=0;j<n;j++){
-      //struct node *ccurrent = b_column[j];
       if(i==j){
 	struct node *nodei = addNode(i,j,i+1);
 	b_row[i] = nodei;
@@ -183,10 +146,58 @@ int main(int argc, char **argv) {
       }
     }
   }
+  printf("\n");
   printf("Initialized by formula:\n");
   printf("\tbij = { i if i==j\n\t\t0 otherwise }\n");
-  //printf("************\n");
   printf("* Matrix B *\n");
-  //printf("************\n");
   printMatrix(b_row,b_column,n);
+  
+  /*
+   * Initialize by formula : Matrix C
+   */
+  struct node *c_row[n];
+  struct node *c_column[n];
+  for(i=0;i<n;i++) {
+    c_row[i] = NULL;
+    c_column[i] = NULL;
+  }
+  for(i=0;i<n;i++) {
+    for(j=0;j<n;j++) {
+      if(i==((j+1) % n)) {
+	tmp = addNode(i,j,(-2*j-1));
+	insertNode(c_row,c_column,tmp);
+      }
+    }
+  }
+  printf("\n");
+  printf("Initialized by formula:\n");
+  printf("\tcij = { -2j-1 if i==j\n\t\t0 otherwise }\n");
+  printf("* Matrix C *\n");
+  printMatrix(c_row,c_column,n);
+
+  /*
+   * Initialize by formula : Matrix D
+   */
+  struct node *d_row[n];
+  struct node *d_column[n];
+  for(i=0;i<n;i++) {
+    d_row[i] = NULL;
+    d_column[i] = NULL;
+  }
+  for(i=0;i<n;i++) {
+    for(j=0;j<n;j++) {
+      if((i%2==0) && (j%2==0)) {
+	tmp = addNode(i,j,(i+j));
+	insertNode(d_row,d_column,tmp);
+      } else if (j==3) {
+	tmp = addNode(i,j,i);
+	insertNode(d_row,d_column,tmp);
+      }
+    }
+  }
+  printf("\n");
+  printf("Initialized by formula:\n");
+  printf("\tcij = { i+j if i==j\n\t\tif j == 3\n\t\t0 otherwise }\n");
+  printf("* Matrix D *\n");
+  printMatrix(d_row,d_column,n);
 }
