@@ -23,9 +23,10 @@ struct node* addNode(int row, int column, int value) {
 }
 
 void printMatrix(struct node *row[], struct node *column[],int n) {
-  for(int i=0;i<n;i++){
+  int i,j;
+  for(i=0;i<n;i++){
     struct node *current = row[i];
-    for(int j=0;j<n;j++) {
+    for(j=0;j<n;j++) {
       if(current->row == i && current->column == j) {
 	printf(" %d ",current->value);
 	current = current->row_link;
@@ -37,9 +38,46 @@ void printMatrix(struct node *row[], struct node *column[],int n) {
   }
 }
 
+void insertNode(int row, int column, struct node *nodex) {
+
+}
+
+void intializeByInput(int n) {
+
+  struct node *mrow[n];
+  struct node *mcolumn[n];
+  struct node *nodex;
+
+  printf("%d x %d Matrix\n",n);
+  int c,row,column,value;
+  printf("Enter in triples in the following form: (type 'q' to end input)\n");
+  printf("row column value\n");
+  while(1) {
+    c=getchar();
+    if(c=='q') {
+      break;
+    }
+    ungetc(c,stdin);
+    row = -1;
+    column = -1;
+    value = -1;
+    scanf("%d %d %d", &row, &column, &value);
+    printf("row = %d , column = %d , value = %d \n", row, column, value);
+    nodex = addNode(row,column,value);
+    insertNode(mrow,mcolumn,nodex);
+  }
+}
+
 int main(int argc, char **argv) {
 
-  int n = 4;
+  if(argc < 2) {
+    printf("Error: You must provide an integer n\n");
+    exit(1);
+  }
+
+  int n = atoi(argv[1]);
+
+  intializeByInput(n);
 
   /* Testing */
   struct node *row[n];
@@ -86,12 +124,13 @@ int main(int argc, char **argv) {
   printMatrix(row,column,n);
   */
 
+  int i,j;
   // Initialize by Formula
   struct node *b_row[n];
   struct node *b_column[n];
-  for(int i=0;i<n;i++){
+  for(i=0;i<n;i++){
     //struct node *rcurrent = b_row[i];
-    for(int j=0;j<n;j++){
+    for(j=0;j<n;j++){
       //struct node *ccurrent = b_column[j];
       if(i==j){
 	struct node *nodei = addNode(i,j,i+1);
