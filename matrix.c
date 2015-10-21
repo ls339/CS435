@@ -39,74 +39,60 @@ void printMatrix(struct node *row[], struct node *column[],int n) {
 }
 
 void insertNode(struct node **row, struct node **column, struct node *nodex) {
-  printf("Nodex row = %d\n",nodex->row);
-  //printf("Nodex column = %d\n",nodex->column);
-  //printf("mrow->value = %d\n",row[nodex->row]->value);
+
+  /*
+   * Insert into row logic
+   */
   struct node* curr;
   if(row[nodex->row]==NULL){
     row[nodex->row] = nodex;
     nodex->row_link = nodex;
   } else {
-    //struct node* curr;
-    curr=row[nodex->row];
-    while(curr->row_link!=NULL) {
+    curr=row[nodex->row]->row_link;
+    while(curr->row_link!=row[nodex->row]) {
       curr=curr->row_link;
     }
     curr->row_link = nodex;
     nodex->row_link = row[nodex->row];
   }
-  //printf("Nodex column = %d\n",nodex->column);
+  
   /*
+   * Insert into column logic.
+   */
   if(column[nodex->column]==NULL) {
-    printf("in if \n");
     column[nodex->column] = nodex;
     nodex->column_link = nodex;
   } else {
-    printf("in if \n");
-    curr=column[nodex->column];
-    printf("in if 1 \n");
-    while(curr->column_link!=NULL) {
-      printf("in if 2 \n");
+    curr=column[nodex->column]->column_link;
+    while(curr->column_link!=column[nodex->column]) {
       curr = curr->column_link;
     }
-    printf("in if 3 \n");
     curr->column_link = nodex;
     nodex->column_link = row[nodex->column];   
-    } */
-  //printf("mrow->value = %d\n",row[nodex->row]->value);
-  /*
-  while(row->next!=NULL) {
-    if(row[nodex->row]==NULL) {
-      row[nodex->row]==nodex;
-    }
-  }
-  */
+    } 
 }
 
 void intializeByInput(int n) {
 
   struct node *mrow[n];
   struct node *mcolumn[n];
-  struct node *matrix[2];
+  struct node *matrix[2];  // To-do : use this to return mrow and mcolumn
   struct node *nodex;
 
-  //mrow[0]=NULL;
-  printf("%d x %d Matrix\n",n);
+  /*
+   * NULL out the arrays so we can check for intial empty slots.
+   */
+  int i;
+  for(i=0;i<n;i++) {
+    mrow[i] = NULL;
+    mcolumn[i] = NULL;
+  }
+
+  printf("%d x %d Matrix\n",n,n);
   int c,row,column,value;
   printf("Enter in triples in the following form: (type 'q' to end input)\n");
   printf("row column value\n");
   while(1) {
-    /*
-    c=getchar();
-    if(c=='q') {
-      break;
-    }
-    ungetc(c,stdin);
-    */
-    //row = -1;
-    //column = -1;
-    //value = -1;
-    //printf("In While Loop Nodex value = %d\n",nodex->value);
     scanf("%d %d %d", &row, &column, &value);
     c=getchar();
     if(c=='q') {
@@ -116,13 +102,11 @@ void intializeByInput(int n) {
     printf("row = %d , column = %d , value = %d \n", row, column, value);
     nodex = addNode(row,column,value);
     insertNode(mrow,mcolumn,nodex);
-    //printf("mrow->value = %d\n",mrow[0]->value);
   }
-  //printf("Out of While Loop Nodex value = %d\n",nodex->value);
-  //matrix[0] = mrow;
-  //matrix[1] = column;
-  //return matrix;
-  //printf("mrow-[0]>value = %d\n",mrow[0]->value);
+  
+  // Lets print out our initialized by input matrix.
+  printf("Initialized by Input:\n");
+  printf("* Matrix A *\n");
   printMatrix(mrow,mcolumn,n);
 }
 
