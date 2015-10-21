@@ -55,18 +55,24 @@ void insertNode(struct node **row, struct node **column, struct node *nodex) {
     curr->row_link = nodex;
     nodex->row_link = row[nodex->row];
   }
-  printf("Nodex column = %d\n",nodex->column);
-  if(column[nodex->column]==NULL){
+  //printf("Nodex column = %d\n",nodex->column);
+  /*
+  if(column[nodex->column]==NULL) {
+    printf("in if \n");
     column[nodex->column] = nodex;
     nodex->column_link = nodex;
   } else {
+    printf("in if \n");
     curr=column[nodex->column];
+    printf("in if 1 \n");
     while(curr->column_link!=NULL) {
+      printf("in if 2 \n");
       curr = curr->column_link;
     }
+    printf("in if 3 \n");
     curr->column_link = nodex;
     nodex->column_link = row[nodex->column];   
-  } 
+    } */
   //printf("mrow->value = %d\n",row[nodex->row]->value);
   /*
   while(row->next!=NULL) {
